@@ -397,7 +397,7 @@ module.exports = function (grunt) {
         },
         pages: {
             options: {
-                remote: 'git@github.com:example_user/example_webapp.git',
+                remote: 'git@github.com:MalvinButterfinger/sc-suggest.git',
                 branch: 'gh-pages'
             }
         },
@@ -464,7 +464,7 @@ module.exports = function (grunt) {
   ]);
 
   grunt.registerTask('pages', [
-      'default',
+      'build',
       'buildcontrol:pages'
   ]);
 };
