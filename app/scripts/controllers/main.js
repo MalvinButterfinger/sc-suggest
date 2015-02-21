@@ -122,7 +122,7 @@ angular.module('scSuggestApp')
           ctrl.widget.stop();
       }
 
-      function paused() {
+      function pause() {
           $scope.paused = true;
           ctrl.widget.pause();
       }
