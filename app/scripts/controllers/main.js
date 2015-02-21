@@ -43,8 +43,9 @@ angular.module('scSuggestApp')
 
       function init() {
           SC.initialize({
-              client_id: '9fb49cbf420185e08526de7349f29b97',
-              redirect_uri: 'http://localhost:9000/callback.html'
+              client_id: '747e72b7a1a64556d542a254e330fcc0',
+              redirect_uri: 'http://MalvinButterfinger.github.io/sc-suggest/callback.html'
+              //redirect_uri: 'http://localhost:9000/callback.html'
           });
       }
 
@@ -134,7 +135,6 @@ angular.module('scSuggestApp')
       }
       
       function previous() {
-          $scope.currentItem.status = '';
           if ($scope.currentPosition > 0) $sc.currentPosition--;
           else $scope.currentPosition = $scope.suggested.length - 1;
           playCurrent();
