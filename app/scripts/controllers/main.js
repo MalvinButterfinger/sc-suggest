@@ -15,7 +15,7 @@ angular.module('scSuggestApp')
       $scope.getTracks = getTracks;
       $scope.next = next;
       $scope.previous = previous;
-      $scope.pause = pauseM
+      $scope.pause = pause;
       $scope.next = next;
       $scope.play = play;
       $scope.connected = false;
