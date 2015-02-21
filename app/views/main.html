@@ -41,7 +41,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="track in suggested" ng-click="playTrack(track.rank)">
+                    <tr ng-repeat="track in suggested" ng-click="playTrack(track.rank)" ng-class="track.htmlClass">
                         <td>{{track.rank+1}}</td>
                         <td>{{track.count}}</td>
                         <td>{{track.status}}</td>

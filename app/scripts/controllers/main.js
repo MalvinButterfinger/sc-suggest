@@ -103,6 +103,7 @@ angular.module('scSuggestApp')
 
       function playTrack(pos) {
           $scope.currentItem.status = '';
+          $scope.currentItem.htmlClass = '';
           $scope.currentPosition = pos;
           playCurrent();
       }
@@ -110,6 +111,7 @@ angular.module('scSuggestApp')
       function next() {
           if ($scope.hasResults) {
               $scope.currentItem.status = '';
+              $scope.currentItem.htmlClass = '';
               $scope.currentPosition++;
               if ($scope.currentPosition == $scope.suggested.length) $scope.currentPosition = 0;
               playCurrent();
@@ -119,12 +121,15 @@ angular.module('scSuggestApp')
 
       function stop() {
           $scope.currentPosition = 0;
+          $scope.currentItem.htmlClass = '';
           $scope.currentItem = $scope.suggested[$scope.currentPosition];
           ctrl.widget.stop();
       }
 
       function pause() {
           $scope.paused = true;
+          $scope.currentItem.status = '';
+          $scope.currentItem.htmlClass = 'warning';
           ctrl.widget.pause();
       }
       
@@ -138,6 +143,7 @@ angular.module('scSuggestApp')
       function playCurrent() {
           $scope.currentItem = $scope.suggested[$scope.currentPosition];
           $scope.currentItem.status = 'playing';
+          $scope.currentItem.htmlClass = 'success';
           if (!$scope.paused) ctrl.widget.load($scope.currentItem.purl, { auto_play: true });
           else ctrl.widget.play();
           $scope.paused = false;

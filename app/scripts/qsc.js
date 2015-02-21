@@ -1,6 +1,9 @@
 ﻿(function (root) {
     root.qsc = factory();
     function factory() {
+        var trackFavoriters = [];
+        var userFavorites = [];
+
         var qsc = {
             get: get,
             getMyData: getMyData,
@@ -80,11 +83,17 @@
         }
 
         function getFavorites(userUrl) {
-            return get(userUrl + '/favorites');
+            if (userFavorites[userUrl]) {
+                return Q.fcall(function () { return userFavorites[userUrl]; });
+            } else {
+                return get(userUrl + '/favorites').then(cacheUserFavorites(userUrl));
+            }
         }
 
         function getFavoriters(trackUrl) {
-            return get(trackUrl + '/favoriters');
+            if (trackFavoriters[trackUrl]) {
+                return Q.fcall(function() { return trackFavoriters[trackUrl]; });
+            } else return get(trackUrl + '/favoriters').then(cacheTrackFavoriters(trackUrl));
         }
 
         function getFollowers(userUrl) {
@@ -93,6 +102,20 @@
 
         function getFollowings(userUrl) {
             return get(userUrl + '/followings');
+        }
+
+        function cacheTrackFavoriters(url) {
+            return function (favoriters) {
+                trackFavoriters[url] = favoriters;
+                return Q.fcall(function()  {return favoriters; });
+            }
+        }
+
+        function cacheUserFavorites(url) {
+            return function (favorites) {
+                userFavorites[url] = favorites;
+                return Q.fcall(function () { return favorites; });
+            }
         }
 
         function connect() {
@@ -104,13 +127,32 @@
             return deferred.promise;
         }
 
-        function get(url) {
+        function get(url, i) {
+            i = i || 0;
             var deferred = Q.defer();
-            SC.get(url, function(data) {
-                deferred.resolve(data);
-            });
-            rejectAfter(5000, 500, deferred, url);
+            resolveOrRetry(url);
+            //rejectAfter(10000, 500, deferred, url);
             return deferred.promise;
+
+            function resolveOrRetry(url) {
+                SC.get(url, { limit: 100, linked_partitioning: 1 },function (data, error) {
+                    if (error) {
+                        resolveOrRetry(url);
+                        return;
+                    }
+                    if (data.collection) {
+                        var results = data.collection;
+                        //if (data.next_href && i < 1) {
+                        //    get(data.next_href, i++).then(results.concat).then(function (results) {
+                        //        deferred.resolve(results);
+                        //    });
+                        //    return;
+                        //} 
+                        deferred.resolve(data.collection);
+                    }
+                    else deferred.resolve(data);
+                });
+            }
         }
 
         function rejectAfter(timeout, step, deferred, msg) {
