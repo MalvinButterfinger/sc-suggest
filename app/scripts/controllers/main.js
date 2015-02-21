@@ -95,7 +95,9 @@ angular.module('scSuggestApp')
 
       function play() {
           if ($scope.hasResults) {
-              if (!$scope.paused) $scope.currentPosition = 0;
+              if (!$scope.paused) {
+                  $scope.currentPosition = 0;
+              }
               playCurrent();
           }
       }
@@ -137,7 +139,7 @@ angular.module('scSuggestApp')
           $scope.currentItem = $scope.suggested[$scope.currentPosition];
           $scope.currentItem.status = 'playing';
           if (!$scope.paused) ctrl.widget.load($scope.currentItem.purl, { auto_play: true });
-          else ctrl.widget.play;
+          else ctrl.widget.play();
           $scope.paused = false;
           $timeout(function () { $scope.$apply();})
       }
