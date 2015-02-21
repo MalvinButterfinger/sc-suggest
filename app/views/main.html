@@ -16,8 +16,10 @@
     <div ng-if="hasResults" id="results">
         <iframe id="widget-iframe"></iframe>
         <div ng-if="showTracks()">
-            <button ng-click="next()">Next</button>
-            <table class="table">
+            <button ng-click="next()" type="button" class="btn btn-default" aria-label="Left Align">
+                <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
+            </button>
+            <table class="table table-hover table-condensed">
                 <thead>
                     <tr>
                         <td>#</td>

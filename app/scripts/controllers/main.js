@@ -80,6 +80,9 @@ angular.module('scSuggestApp')
           $timeout(function () {
               angular.element('#widget-iframe').attr('src', $scope.suggested[0].url);
               ctrl.widget = ctrl.widget || SC.Widget('widget-iframe');
+              ctrl.widget.bind(SC.Widget.Events.FINISH, function (data) {
+                  if (data.relativePosition == 1) next();
+              });
               playCurrent();
           });
       }
@@ -110,8 +113,5 @@ angular.module('scSuggestApp')
           $scope.currentItem = $scope.suggested[$scope.currentPosition];
           $scope.currentItem.status = 'playing';
           ctrl.widget.load($scope.currentItem.purl, {auto_play: true});
-          ctrl.widget.bind(SC.Widget.Events.FINISH, function (data) {
-              if (data.relativePosition == 1) next();
-          });
       }
   });
