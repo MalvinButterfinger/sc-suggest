@@ -106,6 +106,7 @@ angular.module('scSuggestApp')
               $scope.currentPosition++;
               if ($scope.currentPosition == $scope.suggested.length) $scope.currentPosition = 0;
               playCurrent();
+              $scope.$apply();
           }
       }
 
