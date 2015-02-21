@@ -16,8 +16,20 @@
     <div ng-if="hasResults" id="results">
         <iframe id="widget-iframe"></iframe>
         <div ng-if="showTracks()">
-            <button ng-click="next()" type="button" class="btn btn-default" aria-label="Left Align">
+            <button ng-click="previous()" type="button" class="btn btn-default" aria-label="Left Align">
+                <span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
+            </button>
+            <button ng-click="stop()" type="button" class="btn btn-default" aria-label="Left Align">
+                <span class="glyphicon glyphicon-stop" aria-hidden="true"></span>
+            </button>
+            <button ng-click="pause()" type="button" class="btn btn-default" aria-label="Left Align">
+                <span class="glyphicon glyphicon-pause" aria-hidden="true"></span>
+            </button>
+            <button ng-click="play()" type="button" class="btn btn-default" aria-label="Left Align">
                 <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
+            </button>
+            <button ng-click="next()" type="button" class="btn btn-default" aria-label="Left Align">
+                <span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
             </button>
             <table class="table table-hover table-condensed">
                 <thead>

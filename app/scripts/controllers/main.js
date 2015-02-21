@@ -14,6 +14,10 @@ angular.module('scSuggestApp')
       $scope.connect = connect;
       $scope.getTracks = getTracks;
       $scope.next = next;
+      $scope.previous = previous;
+      $scope.pause = pause;
+      $scope.next = next;
+      $scope.play = play;
       $scope.connected = false;
       $scope.hasResults = false;
       $scope.show = 'tracks';
@@ -21,6 +25,8 @@ angular.module('scSuggestApp')
       $scope.currentItem = {};
       $scope.playTrack = playTrack;
       $scope.showTracks = function () { return $scope.show == 'tracks'; }
+      $scope.paused = false;
+
       init();
 
       $scope.$watch('hasResults', onHasResults);
@@ -89,7 +95,9 @@ angular.module('scSuggestApp')
 
       function play() {
           if ($scope.hasResults) {
-              $scope.currentPosition = 0;
+              if (!$scope.paused) {
+                  $scope.currentPosition = 0;
+              }
               playCurrent();
           }
       }
@@ -106,13 +114,33 @@ angular.module('scSuggestApp')
               $scope.currentPosition++;
               if ($scope.currentPosition == $scope.suggested.length) $scope.currentPosition = 0;
               playCurrent();
-              $scope.$apply();
+              $timeout(function () { $scope.$apply(); })
           }
+      }
+
+      function stop() {
+          $scope.currentPosition = 0;
+          $scope.currentItem = $scope.suggested[$scope.currentPosition];
+          ctrl.widget.stop();
+      }
+
+      function pause() {
+          $scope.paused = true;
+          ctrl.widget.pause();
+      }
+      
+      function previous() {
+          if ($scope.currentPosition > 0) $sc.currentPosition--;
+          else $scope.currentPosition = $scope.suggested.length - 1;
+          playCurrent();
       }
 
       function playCurrent() {
           $scope.currentItem = $scope.suggested[$scope.currentPosition];
           $scope.currentItem.status = 'playing';
-          ctrl.widget.load($scope.currentItem.purl, {auto_play: true});
+          if (!$scope.paused) ctrl.widget.load($scope.currentItem.purl, { auto_play: true });
+          else ctrl.widget.play();
+          $scope.paused = false;
+          $timeout(function () { $scope.$apply();})
       }
   });
