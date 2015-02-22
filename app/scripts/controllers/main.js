@@ -84,8 +84,8 @@ angular.module('scSuggestApp')
                 { label: 'user', value: 5 }
             ];
             $scope.inputOption = $scope.inputOptions[0];
-            $scope.myTracks = myData.favorites;
-            $scope.myFollowings = myData.followings;
+            $scope.filteredTracks = myData.favorites;
+            $scope.filteredUsers = myData.followings;
             $scope.$apply();
         });
     }
@@ -99,8 +99,16 @@ angular.module('scSuggestApp')
                         break;
                     case 5:
                         SC.get('/resolve', { url: $scope.inputUrl }, function (user) {
-                            getTracks('/users/' + user.id);
+                            qsc.getFavorites('/users/' + user.id).then(function (f) {
+                                $scope.filteredTracks = f;
+                            }).then(function (d) {
+                                qsc.getFollowings('/users/' + user.id).then(function (f) {
+                                    $scope.filteredUsers = f
+                                    getTracks('/users/' + user.id);
+                                });
+                            });
                         });
+                        break;
                 }
                 break;
             case 2: // artists
@@ -115,7 +123,7 @@ angular.module('scSuggestApp')
             qsc.getFavoriterFavoritesForUserFavorites(user).then(function (tracks) {
                 tracks.sort(function (a, b) { return b.count - a.count });
                 $scope.suggested = tracks.filter(function (t) {
-                    return $scope.myTracks.filter(function (tt) { return tt.id == t.id; }).length == 0 && $scope.myFollowings.filter(function (ff) { return ff.id == t.item.user.id; }).length == 0;
+                    return $scope.filteredTracks.filter(function (tt) { return tt.id == t.id; }).length == 0 && $scope.filteredUsers.filter(function (ff) { return ff.id == t.item.user.id; }).length == 0;
                 }).map(function (t, i) {
                     return {
                         rank: i,
