@@ -3,6 +3,8 @@
     function factory() {
         var trackFavoriters = [];
         var userFavorites = [];
+        var userFollowers = [];
+        var userFollowings = [];
 
         var qsc = {
             get: get,
@@ -34,8 +36,7 @@
 
         function getFavoritesForTrackFavoriters(trackUrl) {
             var deferred = Q.defer();
-            getFavoriters(trackUrl).then(getFavoritesForUsers).then(deferred.resolve);
-            rejectAfter(5000, 500, deferred);
+            getFavoriters(trackUrl).then(getFavoritesForUsers).then(deferred.resolve, deferred.reject);
             return deferred.promise;
         }
 
