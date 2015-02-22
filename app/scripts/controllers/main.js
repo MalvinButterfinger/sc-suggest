@@ -213,4 +213,3 @@ angular.module('scSuggestApp')
         $timeout(function () { $scope.$apply();})
     }
 });
->>>>>>> origin/dev
