@@ -7,8 +7,7 @@
  * # MainCtrl
  * Controller of the scSuggestApp
  */
-angular.module('scSuggestApp')
-  .controller('MainCtrl', function ($scope, $timeout) {
+angular.module('scSuggestApp').controller('MainCtrl', function ($scope, $timeout) {
     var ctrl = this;
 
     $scope.inputOptions = [
@@ -97,6 +96,11 @@ angular.module('scSuggestApp')
                     case 1:
                         getTracks(me);
                         break;
+                    case 3:
+                        SC.get('/resolve', { url: $scope.inputUrl }, function (track) {
+                            getTracksFromTrack('/tracks/' + track.id);
+                        });
+                        break;
                     case 5:
                         SC.get('/resolve', { url: $scope.inputUrl }, function (user) {
                             qsc.getFavorites('/users/' + user.id).then(function (f) {
@@ -120,27 +124,39 @@ angular.module('scSuggestApp')
         $scope.hasResults = false;
         $scope.loading = true;
         $timeout(function () {
-            qsc.getFavoriterFavoritesForUserFavorites(user).then(function (tracks) {
-                tracks.sort(function (a, b) { return b.count - a.count });
-                $scope.suggested = tracks.filter(function (t) {
-                    return $scope.filteredTracks.filter(function (tt) { return tt.id == t.id; }).length == 0 && $scope.filteredUsers.filter(function (ff) { return ff.id == t.item.user.id; }).length == 0;
-                }).map(function (t, i) {
-                    return {
-                        rank: i,
-                        status: '',
-                        info: t.item.user.username + ' - ' + t.item.title,
-                        purl: t.item.permalink_url,
-                        url: 'https://w.soundcloud.com/player/?url=' + t.item.permalink_url,
-                        count: t.count,
-                        id: t.id
-                    }
-                }).slice(0, 2000);
-
-                $scope.loading = false;
-                $scope.hasResults = true;
-                $scope.$apply();
-            });
+            qsc.getFavoriterFavoritesForUserFavorites(user).then(processTracksResult);
         });
+    }
+
+    function getTracksFromTrack(track) {
+        $scope.hasResults = false;
+        $scope.loading = true;
+        $timeout(function () {
+            qsc.getFavoritesForTrackFavoriters(track).then(processTracksResult);
+        });
+    }
+
+    function processTracksResult(tracks) {
+        tracks.sort(function (a, b) { return b.count - a.count });
+        if ($scope.filteredTracks && $scope.filteredUsers) {
+            tracks = tracks.filter(function (t) {
+                return $scope.filteredTracks.filter(function (tt) { return tt.id == t.id; }).length == 0 && $scope.filteredUsers.filter(function (ff) { return ff.id == t.item.user.id; }).length == 0;
+            });
+        }
+        $scope.suggested = tracks.slice(0, 2000).map(function (t, i) {
+            return {
+                rank: i,
+                status: '',
+                info: t.item.user.username + ' - ' + t.item.title,
+                purl: t.item.permalink_url,
+                url: 'https://w.soundcloud.com/player/?url=' + t.item.permalink_url,
+                count: t.count,
+                id: t.id
+            }
+        });
+        $scope.loading = false;
+        $scope.hasResults = true;
+        $scope.$apply();
     }
 
     function onHasResults(nv, ov) {
