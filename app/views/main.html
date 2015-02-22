@@ -10,12 +10,24 @@
         <img src="images/btn-connect-sc-l.png" ng-click="connect()" />
     </p>
 
-    <h4>Suggest Tracks</h4>
-    <button ng-click="getTracks()">Tracks!</button>
+    <h4>Options</h4>
+    Suggest
+    <select ng-model="outputOption" ng-options="opt as opt.label for opt in outputOptions"></select>
+    from
+    <select ng-model="inputOption" ng-options="opt as opt.label for opt in inputOptions"></select>
+    <input type="text" ng-model="inputUrl" class="form-control" placeholder="{{inputPlaceholder}}" />
+
+    <h4>OK</h4>
+    <button class="btn btn-default" ng-click="getTracks()">Tracks!</button>
+    <div ng-if="loading">
+        <p class="bg-info">
+            <span><i class="glyphicon glyphicon-refresh"></i>Loading suggestions...</span>
+        </p>
+    </div>
 
     <div ng-if="hasResults" id="results">
         <iframe id="widget-iframe"></iframe>
-        <div ng-if="showTracks()">
+        <div>
             <button ng-click="previous()" type="button" class="btn btn-default" aria-label="Left Align">
                 <span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
             </button>
@@ -51,7 +63,4 @@
             </table>
         </div>
     </div>
-
-    <h4>Karma</h4>
-    <p>Spectacular Test Runner for JavaScript.</p>
 </div>
