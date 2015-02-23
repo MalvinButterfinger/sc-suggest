@@ -19,7 +19,7 @@ angular.module('scSuggestApp').controller('MainCtrl', function ($scope, $timeout
 
     $scope.outputOptions = [
         { label: 'tracks', value: 1 },
-        { label: 'artists', value: 2 }
+       // { label: 'artists', value: 2 }
     ];
     $scope.outputOption = $scope.outputOptions[0];
     $scope.inputUrl = '';
@@ -101,6 +101,10 @@ angular.module('scSuggestApp').controller('MainCtrl', function ($scope, $timeout
                             getTracksFromTrack('/tracks/' + track.id);
                         });
                         break;
+                    case 4:
+                        SC.get('/resolve', { url: $scope.inputUrl }, function (user) {
+                            getTracksFromArtist('/users/' + user.id);
+                        });
                     case 5:
                         SC.get('/resolve', { url: $scope.inputUrl }, function (user) {
                             qsc.getFavorites('/users/' + user.id).then(function (f) {
@@ -133,6 +137,14 @@ angular.module('scSuggestApp').controller('MainCtrl', function ($scope, $timeout
         $scope.loading = true;
         $timeout(function () {
             qsc.getFavoritesForTrackFavoriters(track).then(processTracksResult);
+        });
+    }
+
+    function getTracksFromArtist(artist) {
+        $scope.hasResults = false;
+        $scope.loading = true;
+        $timeout(function () {
+            qsc.getFavoritesForUserFollowers(track).then(processTracksResult);
         });
     }
 

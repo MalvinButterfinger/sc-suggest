@@ -14,6 +14,7 @@
             getFollowings: getFollowings,
             getFavoritesForTrackFavoriters: getFavoritesForTrackFavoriters,
             getFavoriterFavoritesForUserFavorites: getFavoriterFavoritesForUserFavorites,
+            getFavoritesForUserFollowers: getFavoritesForUserFollowers,
             connect: connect
         };
         return qsc;
@@ -25,6 +26,12 @@
                     deferred.resolve({ favorites: favorites, followings: followings });
                 });
             });
+            return deferred.promise;
+        }
+
+        function getFavoritesForUserFollowers(userUrl) {
+            var deferred = Q.defer();
+            getFollowers(userUrl).then(getFavoritesForUsers).then(deferred.resolve, deferred.reject);
             return deferred.promise;
         }
 
@@ -98,11 +105,20 @@
         }
 
         function getFollowers(userUrl) {
-            return get(userUrl + '/followers');
+            if (userFollowers[userUrl]) {
+                return Q.fcall(function () { return userFollowers[userUrl]; });
+            } else get(userUrl + '/followers').then(cacheUserFollowers(userUrl));
         }
 
         function getFollowings(userUrl) {
             return get(userUrl + '/followings');
+        }
+
+        function cacheUserFollowers(url) {
+            return function (users) {
+                userFollowers[url] = users;
+                return Q.fcall(function () { return users;})
+            }
         }
 
         function cacheTrackFavoriters(url) {
