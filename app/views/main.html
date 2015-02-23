@@ -15,7 +15,9 @@
     <select ng-model="outputOption" ng-options="opt as opt.label for opt in outputOptions"></select>
     from
     <select ng-model="inputOption" ng-options="opt as opt.label for opt in inputOptions"></select>
-    <input type="text" ng-model="inputUrl" class="form-control" placeholder="{{inputPlaceholder}}" />
+    <div ng-show="showInput">
+        <input type="text" ng-model="inputUrl" class="form-control" placeholder="{{inputPlaceholder}}" />
+    </div>
 
     <h4>OK</h4>
     <button class="btn btn-default" ng-click="getTracks()">Tracks!</button>
