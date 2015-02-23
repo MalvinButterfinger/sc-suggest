@@ -156,7 +156,7 @@ angular.module('scSuggestApp').controller('MainCtrl', function ($scope, $timeout
         $scope.hasResults = false;
         $scope.loading = true;
         $timeout(function () {
-            qsc.getFavoritesForUserFollowers(track).then(processTracksResult);
+            qsc.getFavoritesForUserFollowers(artist).then(processTracksResult);
         });
     }
 
