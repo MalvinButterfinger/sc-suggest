@@ -187,7 +187,7 @@ angular.module('scSuggestApp').controller('MainCtrl', function ($scope, $timeout
         if (!nv) return;
         $timeout(function () {
             angular.element('#widget-iframe').attr('src', $scope.suggested[0].url);
-            ctrl.widget = ctrl.widget || SC.Widget('widget-iframe');
+            ctrl.widget = SC.Widget('widget-iframe');
             ctrl.widget.bind(SC.Widget.Events.FINISH, function (data) {
                 if (data.relativePosition == 1) next();
             });
