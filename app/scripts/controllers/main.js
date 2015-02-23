@@ -94,7 +94,7 @@ angular.module('scSuggestApp').controller('MainCtrl', function ($scope, $timeout
             case 1: // tracks
                 switch ($scope.inputOption.value) {
                     case 1:
-                        getTracks(me);
+                        getTracks('/me');
                         break;
                     case 3:
                         SC.get('/resolve', { url: $scope.inputUrl }, function (track) {
