@@ -96,6 +96,9 @@ angular.module('scSuggestApp').controller('MainCtrl', function ($scope, $timeout
                     case 1:
                         getTracks('/me');
                         break;
+                    case 2:
+                        getTracksFromUserFollowings('/me');
+                        break;
                     case 3:
                         SC.get('/resolve', { url: $scope.inputUrl }, function (track) {
                             getTracksFromTrack('/tracks/' + track.id);
@@ -105,6 +108,7 @@ angular.module('scSuggestApp').controller('MainCtrl', function ($scope, $timeout
                         SC.get('/resolve', { url: $scope.inputUrl }, function (user) {
                             getTracksFromArtist('/users/' + user.id);
                         });
+                        break;
                     case 5:
                         SC.get('/resolve', { url: $scope.inputUrl }, function (user) {
                             qsc.getFavorites('/users/' + user.id).then(function (f) {
@@ -129,6 +133,14 @@ angular.module('scSuggestApp').controller('MainCtrl', function ($scope, $timeout
         $scope.loading = true;
         $timeout(function () {
             qsc.getFavoriterFavoritesForUserFavorites(user).then(processTracksResult);
+        });
+    }
+
+    function getTracksFromUserFollowings(user) {
+        $scope.hasResults = false;
+        $scope.loading = true;
+        $timeout(function () {
+            qsc.getFavoritesForUserFollowings(track).then(processTracksResult);
         });
     }
 
