@@ -38,7 +38,7 @@
 
         function getFavoritesForUserFollowings(userUrl) {
             var deferred = Q.defer();
-            getFollowings(userUrl).then(getFavoritesForUsers).then(deferred.resolve, deferred.reject);
+            getFollowings(userUrl).then(getFollowersForUsers).then(getFavoritesForUsers).then(deferred.resolve, deferred.reject);
             return deferred.promise;
         }
 
@@ -73,7 +73,6 @@
         function getFavoritesForTracksFavoriters(tracks) {
             return groupItemsForItems(tracks, function (t) { return getFavoriters('/tracks/' + t.id); }).then(getFavoritesForUsers);
         }
-
 
         function groupItemsForItems(items, getItems) {
             var deferred = Q.defer();
