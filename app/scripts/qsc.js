@@ -113,7 +113,7 @@
         function getFollowers(userUrl) {
             if (userFollowers[userUrl]) {
                 return Q.fcall(function () { return userFollowers[userUrl]; });
-            } else get(userUrl + '/followers').then(cacheUserFollowers(userUrl));
+            } else return get(userUrl + '/followers').then(cacheUserFollowers(userUrl));
         }
 
         function getFollowings(userUrl) {
