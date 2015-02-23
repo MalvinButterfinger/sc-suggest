@@ -15,6 +15,7 @@
             getFavoritesForTrackFavoriters: getFavoritesForTrackFavoriters,
             getFavoriterFavoritesForUserFavorites: getFavoriterFavoritesForUserFavorites,
             getFavoritesForUserFollowers: getFavoritesForUserFollowers,
+            getFavoritesForUserFollowings: getFavoritesForUserFollowings,
             connect: connect
         };
         return qsc;
@@ -32,6 +33,12 @@
         function getFavoritesForUserFollowers(userUrl) {
             var deferred = Q.defer();
             getFollowers(userUrl).then(getFavoritesForUsers).then(deferred.resolve, deferred.reject);
+            return deferred.promise;
+        }
+
+        function getFavoritesForUserFollowings(userUrl) {
+            var deferred = Q.defer();
+            getFollowings(userUrl).then(getFavoritesForUsers).then(deferred.resolve, deferred.reject);
             return deferred.promise;
         }
 
