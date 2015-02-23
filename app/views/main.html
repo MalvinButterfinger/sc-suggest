@@ -15,7 +15,7 @@
     <select ng-model="outputOption" ng-options="opt as opt.label for opt in outputOptions"></select>
     from
     <select ng-model="inputOption" ng-options="opt as opt.label for opt in inputOptions"></select>
-    <div ng-show="showInput">
+    <div ng-show="showInput()">
         <input type="text" ng-model="inputUrl" class="form-control" placeholder="{{inputPlaceholder}}" />
     </div>
 
