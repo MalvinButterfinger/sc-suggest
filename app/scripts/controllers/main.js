@@ -69,7 +69,7 @@ angular.module('scSuggestApp').controller('MainCtrl', function ($scope, $timeout
     function init() {
         SC.initialize({
             client_id: '747e72b7a1a64556d542a254e330fcc0',
-            redirect_uri: 'http://localhost:9000/callback.html'
+            redirect_uri: 'http://MalvinButterfinger.github.io/sc-suggest/callback.html'
         });
     }
 
