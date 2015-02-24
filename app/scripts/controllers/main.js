@@ -102,7 +102,10 @@ angular.module('scSuggestApp').controller('MainCtrl', function ($scope, $timeout
                         getTracksFromUserFollowings('/me');
                         break;
                     case 3:
-                        SC.get('/resolve', { url: $scope.inputUrl }, function (track) {
+                        SC.get('/resolve', { url: $scope.inputUrl }, function (track, error) {
+                            if (error) {
+                                onError($scope.inputUrl + ' ' + error.message, false);
+                            }
                             getTracksFromTrack('/tracks/' + track.id);
                         });
                         break;
@@ -112,7 +115,10 @@ angular.module('scSuggestApp').controller('MainCtrl', function ($scope, $timeout
                         });
                         break;
                     case 5:
-                        SC.get('/resolve', { url: $scope.inputUrl }, function (user) {
+                        SC.get('/resolve', { url: $scope.inputUrl }, function (user, error) {
+                            if (error) {
+
+                            }
                             qsc.getFavorites('/users/' + user.id).then(function (f) {
                                 $scope.filteredTracks = f;
                             }).then(function (d) {
@@ -185,9 +191,10 @@ angular.module('scSuggestApp').controller('MainCtrl', function ($scope, $timeout
         $scope.$apply();
     }
 
-    function onError(error) {
+    function onError(error, apply) {
         $scope.errorText = error;
-        $timeout(function () { $scope.$apply(); });
+        $scope.loading = false;
+        if (apply) $timeout(function () { $scope.$apply(); });
     }
 
     function onHasResults(nv, ov) {
