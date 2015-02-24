@@ -1,5 +1,5 @@
 <div class="jumbotron">
-  <h1>SoundCloud Suggestions</h1>
+  <h2>SoundCloud Suggestions</h2>
   <p class="lead">
   </p>
 </div>
@@ -25,6 +25,10 @@
         <p class="bg-info">
             <span><i class="glyphicon glyphicon-refresh"></i>Loading suggestions...</span>
         </p>
+    </div>
+
+    <div ng-if="errorText.length > 0">
+        <p class="bg-error"><span>{{errorText}}</span></p>
     </div>
 
     <div ng-if="hasResults" id="results">
