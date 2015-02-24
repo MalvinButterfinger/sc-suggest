@@ -38,6 +38,7 @@ angular.module('scSuggestApp').controller('MainCtrl', function ($scope, $timeout
     $scope.inputPlaceholder = '';
     $scope.paused = false;
     $scope.loading = false;
+    $scope.errorText = '';
     $scope.showInput = function () {
         return $scope.inputOption.value > 2;
     }
@@ -67,8 +68,8 @@ angular.module('scSuggestApp').controller('MainCtrl', function ($scope, $timeout
 
     function init() {
         SC.initialize({
-            client_id: '747e72b7a1a64556d542a254e330fcc0',
-            redirect_uri: 'http://MalvinButterfinger.github.io/sc-suggest/callback.html'
+            client_id: '9fb49cbf420185e08526de7349f29b97',
+            redirect_uri: 'http://localhost:9000/callback.html'
         });
     }
 
@@ -90,6 +91,7 @@ angular.module('scSuggestApp').controller('MainCtrl', function ($scope, $timeout
     }
 
     function suggest() {
+        $scope.errorText = '';
         switch ($scope.outputOption.value) {
             case 1: // tracks
                 switch ($scope.inputOption.value) {
@@ -132,7 +134,7 @@ angular.module('scSuggestApp').controller('MainCtrl', function ($scope, $timeout
         $scope.hasResults = false;
         $scope.loading = true;
         $timeout(function () {
-            qsc.getFavoriterFavoritesForUserFavorites(user).then(processTracksResult);
+            qsc.getFavoriterFavoritesForUserFavorites(user).then(processTracksResult, onError);
         });
     }
 
@@ -140,7 +142,7 @@ angular.module('scSuggestApp').controller('MainCtrl', function ($scope, $timeout
         $scope.hasResults = false;
         $scope.loading = true;
         $timeout(function () {
-            qsc.getFavoritesForUserFollowings(user).then(processTracksResult);
+            qsc.getFavoritesForUserFollowings(user).then(processTracksResult, onError);
         });
     }
 
@@ -148,7 +150,7 @@ angular.module('scSuggestApp').controller('MainCtrl', function ($scope, $timeout
         $scope.hasResults = false;
         $scope.loading = true;
         $timeout(function () {
-            qsc.getFavoritesForTrackFavoriters(track).then(processTracksResult);
+            qsc.getFavoritesForTrackFavoriters(track).then(processTracksResult, onError);
         });
     }
 
@@ -156,7 +158,7 @@ angular.module('scSuggestApp').controller('MainCtrl', function ($scope, $timeout
         $scope.hasResults = false;
         $scope.loading = true;
         $timeout(function () {
-            qsc.getFavoritesForUserFollowers(artist).then(processTracksResult);
+            qsc.getFavoritesForUserFollowers(artist).then(processTracksResult, onError);
         });
     }
 
@@ -181,6 +183,11 @@ angular.module('scSuggestApp').controller('MainCtrl', function ($scope, $timeout
         $scope.loading = false;
         $scope.hasResults = true;
         $scope.$apply();
+    }
+
+    function onError(error) {
+        $scope.errorText = error;
+        $timeout(function () { $scope.$apply(); });
     }
 
     function onHasResults(nv, ov) {

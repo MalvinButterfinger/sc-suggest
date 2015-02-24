@@ -157,10 +157,15 @@
             //rejectAfter(10000, 500, deferred, url);
             return deferred.promise;
 
-            function resolveOrRetry(url) {
-                SC.get(url, { limit: 100, linked_partitioning: 1 },function (data, error) {
+            function resolveOrRetry(url, j, err) {
+                j = j || 0;
+                if (j > 10) {
+                    deferred.reject(url + '' + err.message);
+                    return;
+                }
+                SC.get(url, { limit: 199, linked_partitioning: 1 },function (data, error) {
                     if (error) {
-                        resolveOrRetry(url);
+                        resolveOrRetry(url, ++j, error);
                         return;
                     }
                     if (data.collection) {
