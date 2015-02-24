@@ -191,6 +191,7 @@ angular.module('scSuggestApp').controller('MainCtrl', function ($scope, $timeout
             ctrl.widget.bind(SC.Widget.Events.FINISH, function (data) {
                 if (data.relativePosition == 1) next();
             });
+            $scope.currentPosition = 0
             playCurrent();
         });
     }
